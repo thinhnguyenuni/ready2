@@ -1,0 +1,12 @@
+fa\training\service\impl\DetailServiceImpl.class
+fa\training\repository\TypeRepository.class
+fa\training\controller\ErrorController.class
+fa\training\service\DetailService.class
+fa\training\controller\HomeController.class
+fa\training\models\Detail.class
+fa\training\service\impl\TypeServiceImpl.class
+fa\training\models\Type.class
+fa\training\controller\DetailController.class
+fa\training\repository\DetailRepository.class
+fa\training\service\TypeService.class
+fa\training\models\dto\SumInfoDTO.class

@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:tx="http://www.springframework.org/schema/tx"
+	xmlns:mvc="http://www.springframework.org/schema/mvc"
+	xmlns:jpa="http://www.springframework.org/schema/data/jpa"
+	xsi:schemaLocation="
+		http://www.springframework.org/schema/beans
+		http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/context
+		http://www.springframework.org/schema/context/spring-context.xsd
+		http://www.springframework.org/schema/mvc
+		http://www.springframework.org/schema/mvc/spring-mvc.xsd
+		http://www.springframework.org/schema/tx 
+		http://www.springframework.org/schema/tx/spring-tx.xsd
+		http://www.springframework.org/schema/data/jpa 
+		http://www.springframework.org/schema/data/jpa/spring-jpa.xsd">
+
+	<!-- Add support for component scanning -->
+	<!-- Quét và tìm kiếm các bean được chú thích bằng annotation trong package 
+		"fa.training" -->
+	<context:component-scan
+		base-package="fa.training" />
+	<context:annotation-config />
+
+	<!-- Kích hoạt hỗ trợ cho các annotation của Spring MVC -->
+	<mvc:annotation-driven />
+
+	<!-- Định nghĩa trình giải mã Spring MVC để xử lý các view -->
+	<bean
+		class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+		<property name="prefix" value="/WEB-INF/views/" /> <!-- Tiền tố cho tất cả các view -->
+		<property name="suffix" value=".jsp" /> <!-- Hậu tố cho tất cả các view -->
+	</bean>
+
+	<!-- Bước 1: Định nghĩa DataSource cho cơ sở dữ liệu -->
+	<bean id="dataSource"
+		class="org.springframework.jdbc.datasource.DriverManagerDataSource">
+		<property name="driverClassName"
+			value="com.microsoft.sqlserver.jdbc.SQLServerDriver" /> <!-- Driver cho SQL Server -->
+		<property name="url"
+			value="jdbc:sqlserver://localhost:1433;databaseName=READY_2;encrypt=true;trustServerCertificate=true;sendTimeAsDateTime=false" /> <!-- URL kết nối đến cơ sở dữ liệu -->
+		<property name="username" value="sa" /> <!-- Tên người dùng của cơ sở dữ liệu -->
+		<property name="password" value="123" /> <!-- Mật khẩu của người dùng -->
+	</bean>
+
+	<!-- Bước 2: Cấu hình Entity Manager Factory -->
+	<bean name="entityManagerFactory"
+		class="org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean">
+		<property name="dataSource" ref="dataSource" /> <!-- DataSource được sử dụng -->
+		<property name="packagesToScan" value="fa.training.models" /> <!-- Quét các package chứa các entity -->
+		<property name="jpaVendorAdapter">
+			<bean
+				class="org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter" /> <!-- Sử dụng Hibernate làm JPA provider -->
+		</property>
+		<property name="jpaProperties">
+			<props>
+				<prop key="hibernate.dialect">org.hibernate.dialect.SQLServer2012Dialect</prop> <!-- Dialect cho SQL Server -->
+				<prop key="hibernate.show_sql">true</prop> <!-- Hiển thị các câu lệnh SQL được tạo ra -->
+				<prop key="hibernate.hbm2ddl.auto">update</prop> <!-- Tự động tạo hoặc cập nhật cấu trúc cơ sở dữ liệu -->
+			</props>
+		</property>
+	</bean>
+
+	<!-- Bước 3: Cấu hình Transaction Manager cho JPA -->
+	<bean id="transactionManager"
+		class="org.springframework.orm.jpa.JpaTransactionManager">
+		<property name="entityManagerFactory"
+			ref="entityManagerFactory" /> <!-- EntityManagerFactory được sử dụng -->
+	</bean>
+
+	<!-- Bước 4: Kích hoạt hỗ trợ cho transactional behavior dựa trên các annotation -->
+	<tx:annotation-driven
+		transaction-manager="transactionManager" />
+
+	<!-- Quét và tìm kiếm các repository trong package "fa.training.repository" -->
+	<jpa:repositories
+		base-package="fa.training.repository" />
+
+	<!-- Hỗ trợ đọc các tài nguyên web: css, images, js, vv ... -->
+	<mvc:resources location="/WEB-INF/resources/"
+		mapping="/resources/**" />
+
+	<!-- Config message.properties -->
+
+</beans>

@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns="http://xmlns.jcp.org/xml/ns/javaee"
+	xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee http://xmlns.jcp.org/xml/ns/javaee/web-app_3_1.xsd"
+	id="WebApp_ID" version="3.1">
+	<!-- Đặt tên hiển thị cho ứng dụng -->
+	<display-name>JWD_General_SpringMVC</display-name>
+
+	<!-- Thiết lập trang chào mừng -->
+	<welcome-file-list>
+		<welcome-file>/WEB-INF/views/add-computer.jsp</welcome-file> <!-- Trang chào mừng sẽ được hiển thị -->
+	</welcome-file-list>
+
+	<!-- Cấu hình DispatcherServlet -->
+	<servlet>
+		<servlet-name>dispatcher</servlet-name> <!-- Tên servlet -->
+		<servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class> <!-- DispatcherServlet của Spring MVC -->
+		<init-param>
+			<param-name>contextConfigLocation</param-name>
+			<param-value>/WEB-INF/spring-servlet.xml</param-value> <!-- Đường dẫn tới tập tin cấu hình của DispatcherServlet -->
+		</init-param>
+		<load-on-startup>1</load-on-startup> <!-- Load servlet khi ứng dụng được khởi động -->
+	</servlet>
+
+	<!-- Ánh xạ URL pattern của servlet -->
+	<servlet-mapping>
+		<servlet-name>dispatcher</servlet-name> <!-- Tên servlet cần ánh xạ -->
+		<url-pattern>/</url-pattern> <!-- Mọi URL sẽ được điều hướng qua DispatcherServlet -->
+	</servlet-mapping>
+
+	<!-- Thiết lập bộ lọc để xử lý mã hóa ký tự -->
+	<filter>
+		<filter-name>encodingFilter</filter-name> <!-- Tên của bộ lọc -->
+		<filter-class>org.springframework.web.filter.CharacterEncodingFilter</filter-class> <!-- Lớp của bộ lọc -->
+		<init-param>
+			<param-name>encoding</param-name>
+			<param-value>UTF-8</param-value> <!-- Bộ mã hóa sẽ được sử dụng -->
+		</init-param>
+		<init-param>
+			<param-name>forceEncoding</param-name>
+			<param-value>true</param-value> <!-- Lựa chọn để bắt buộc mã hóa -->
+		</init-param>
+	</filter>
+
+	<!-- Ánh xạ URL pattern của bộ lọc -->
+	<filter-mapping>
+		<filter-name>encodingFilter</filter-name> <!-- Tên của bộ lọc cần ánh xạ -->
+		<url-pattern>/*</url-pattern> <!-- Ánh xạ cho tất cả các URL -->
+	</filter-mapping>
+
+	<!-- Thiết lập trang lỗi -->
+	<error-page>
+		<error-code>404</error-code> <!-- Mã lỗi -->
+		<location>/WEB-INF/views/error/404.jsp</location> <!-- Trang lỗi tương ứng -->
+	</error-page>
+
+	<!-- <error-page> -->
+	<!-- <error-code>500</error-code> -->
+	<!-- <location>/WEB-INF/views/error/404.jsp</location> -->
+	<!-- </error-page> -->
+
+</web-app>
